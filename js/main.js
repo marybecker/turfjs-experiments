@@ -22,7 +22,7 @@ const flowlineData = d3.json('data/flowlines-eightmile.geojson');
 // use Promise to wait until data is all loaded
 Promise.all([catchmentsData,flowlineData]).then(drawMap);
 
-
+// draw map function
 function drawMap(data) {
 
     // Separate data
@@ -42,15 +42,18 @@ function drawMap(data) {
         onEachFeature(feature,layer){
             //Calculate Area on the fly and bind data to tooltip on hover over
             layer.on('mouseover', function () {
+
                 var catchmentFeature = layer.toGeoJSON();
                 var catchmentArea = (turf.area(catchmentFeature) / 1000000).toFixed(2);
                 let tooltip = "Catchment Area (SqKm) " + catchmentArea.toLocaleString();
-                console.log(catchmentArea);
+                //console.log(catchmentArea);
+
                 this.bindTooltip(tooltip,{
                     sticky: true,
                     className: 'tooltip',
                 });
                 // highlight with darker fill
+
                 this.setStyle({
                     fillOpacity: .8
                 });
@@ -73,8 +76,10 @@ function drawMap(data) {
             };
         },
         onEachFeature(feature,layer){
+
             var flowlineFeature = layer.toGeoJSON();
             let options = {units: 'kilometers'};
+
             layer.on('mouseover',function(){
                 let flowlineLength = turf.length(flowlineFeature, options);
                 let tooltip = 'Length of Stream Segment (km) ' + flowlineLength.toLocaleString();
@@ -83,11 +88,21 @@ function drawMap(data) {
                     className: 'tooltip',
                 });
             });
+
             layer.on('click',function(){
-                var alongFlowline = turf.along(flowlineFeature, 0.15, options);
-                var alongFlowlinePt = L.geoJson(alongFlowline).addTo(map);
+                const distance = 0.1;
+                getAlong(flowlineFeature,distance);
             });
         }
     }).addTo(map);
+
 }
 
+// Adds points along a line at a specified distance
+function getAlong (line,distance){
+    var length = turf.lineDistance(line, 'kilometers');
+    for (let i = 1; i<= length / distance; i++){
+        var alongFlowline = turf.along(line, i * distance, 'kilometers');
+        L.geoJson(alongFlowline).addTo(map);
+    }
+}
