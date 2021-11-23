@@ -22,12 +22,15 @@ const flowlineData = d3.json('data/flowlines-eightmile.geojson');
 // use Promise to wait until data is all loaded
 Promise.all([catchmentsData,flowlineData]).then(drawMap);
 
+
 // draw map function
 function drawMap(data) {
+
 
     // Separate data
     const catchments = data[0];
     const flowline = data[1];
+    console.log(flowline);
 
     //Draw Catchments
     L.geoJson(catchments, {
@@ -68,7 +71,7 @@ function drawMap(data) {
         }
     }).addTo(map);
 
-    L.geoJson(flowline, {
+    var flow = L.geoJson(flowline, {
         style: function(feature, layer) {
             return {
                 color: "navy",
@@ -76,7 +79,6 @@ function drawMap(data) {
             };
         },
         onEachFeature(feature,layer){
-
             var flowlineFeature = layer.toGeoJSON();
             let options = {units: 'kilometers'};
 
@@ -88,21 +90,39 @@ function drawMap(data) {
                     className: 'tooltip',
                 });
             });
-
-            layer.on('click',function(){
-                const distance = 0.1;
-                getAlong(flowlineFeature,distance);
-            });
         }
+
+
     }).addTo(map);
+
+    flow.on('click', function(e){
+        var flowLayer = e.layer;
+        var flowLayerGeoJson = flowLayer.toGeoJSON();
+        const distance = 0.1;
+
+        // if (flowPtsLine !== undefined){
+        //     map.removeLayer(flowPtsLine);
+        // }
+
+        var flowPts = getAlong(flowLayerGeoJson,distance);
+        var flowPtsLine = L.geoJson(flowPts).addTo(map);
+        console.log(flowPtsLine);
+
+
+    });
 
 }
 
 // Adds points along a line at a specified distance
 function getAlong (line,distance){
     var length = turf.lineDistance(line, 'kilometers');
+    var collection = [];
     for (let i = 1; i<= length / distance; i++){
         var alongFlowline = turf.along(line, i * distance, 'kilometers');
-        L.geoJson(alongFlowline).addTo(map);
+        collection.push(alongFlowline);
     }
+
+    return turf.featureCollection(collection);
 }
+
+
