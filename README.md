@@ -16,6 +16,8 @@ Wild Brook Trout Stream Survey Resample Sites:
 
 https://marybecker.github.io/turfjs-experiments/
 
+![turf-along](images/turf-along.png)
+
 The map demonstrates an example of adding points along a line at a specified distance.  In the
 example points are add to each line clicked at 100 meter intervals.
 
@@ -26,6 +28,8 @@ Uses [turf.length()](https://turfjs.org/docs/#length), [turf.area()](https://tur
 ## Server-side Turf JS
 
 https://marybecker.github.io/turfjs-experiments/basin.html
+
+![turf-buffer-spatialjoin](images/turf-buffer-spatialjoin.png)
 
 The [buffer-stream.js](build-scripts/buffer-stream.js) takes in a MultiLineString and creates a buffer around the 
 lines at a specified radius.  The script then dissolves the lines into one feature and simplifies
