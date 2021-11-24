@@ -1,0 +1,26 @@
+{
+  "name": "turfjs-experiments",
+  "version": "1.0.0",
+  "description": "Experiments with turf js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marybecker/turfjs-experiments.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marybecker/turfjs-experiments/issues"
+  },
+  "homepage": "https://github.com/marybecker/turfjs-experiments#readme",
+  "dependencies": {
+    "@turf/turf": "^6.5.0",
+    "async": "^3.2.2",
+    "chalk": "^4.1.2",
+    "csv2geojson": "^5.1.1",
+    "csvtojson": "^2.0.10"
+  }
+}

@@ -115,7 +115,7 @@ function drawMap(data) {
 
 // Adds points along a line at a specified distance
 function getAlong (line,distance){
-    var length = turf.lineDistance(line, 'kilometers');
+    var length = turf.length(line, 'kilometers');
     var collection = [];
     for (let i = 1; i<= length / distance; i++){
         var alongFlowline = turf.along(line, i * distance, 'kilometers');
